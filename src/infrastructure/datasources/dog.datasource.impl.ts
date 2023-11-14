@@ -11,10 +11,12 @@ import fs from 'fs';
 
 export class DogDatasourceImpl extends DogDatasource {
   async create(createDogDto: CreateDogDto): Promise<DogEntity> {
+    const { file, ...dog } = createDogDto;
+
     try {
       const newDog = await prisma.dog.create({
         data: {
-          ...createDogDto,
+          ...dog,
           photo: createDogDto.file,
         },
       });
