@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+enum Species {
+  CAT
+  DOG
+}
+
+enum Size {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+model breed {
+  id      Int     @id @default(autoincrement())
+  name    String  @unique @db.VarChar(255)
+  species Species
+  dog     dog[]
+  cat     cat[]
+}
+
+model size {
+  id   Int   @id @default(autoincrement())
+  name Size  @unique
+  dog  dog[]
+  cat  cat[]
+}
+
+model dog {
+  id          Int    @id @default(autoincrement())
+  breed       breed  @relation(fields: [breedId], references: [id])
+  breedId     Int
+  size        size   @relation(fields: [sizeId], references: [id])
+  sizeId      Int
+  color       String
+  personality String
+  photo       String
+}
+
+model cat {
+  id          Int    @id @default(autoincrement())
+  breed       breed  @relation(fields: [breedId], references: [id])
+  breedId     Int
+  size        size   @relation(fields: [sizeId], references: [id])
+  sizeId      Int
+  color       String
+  personality String
+  photo       String
+}
